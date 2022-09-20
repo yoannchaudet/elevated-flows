@@ -5,4 +5,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Yoann Chaudet"]
   s.email       = "yoannchaudet@github.com"
   s.files       = ["lib/elevated-flows.rb"]
+
+  # Dependencies
+  s.add_dependency("octokit", "~> 5.0")
 end
