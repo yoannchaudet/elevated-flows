@@ -1,16 +1,17 @@
-GEM
-  remote: https://rubygems.org/
+PATH
+  remote: .
   specs:
-    minitest (5.15.0)
+    elevated-flows (0.0.0)
+
+GEM
+  remote: http://www.rubygems.org/
+  specs:
 
 PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  minitest
-
-RUBY VERSION
-   ruby 3.1.2p20
+  elevated-flows!
 
 BUNDLED WITH
    2.3.22
