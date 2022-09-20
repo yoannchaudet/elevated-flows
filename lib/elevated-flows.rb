@@ -1,7 +1,20 @@
+require "singleton"
+
 module ElevatedFlows; end
 
-def ElevatedFlow(&block)
-  puts 'hello there'
+class ElevatedFlows::Description
+  include Singleton
 
-  block.call
+  def initialize
+    # nothing
+  end
+
+  def hello(&block)
+    puts 'hello'
+  end
+end
+
+def ElevatedFlow(&block)
+  puts 'hello from the top level'
+  ElevatedFlows::Description.instance.instance_eval(&block)
 end

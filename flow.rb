@@ -1,5 +1,11 @@
-require "elevated-flows"
-
 ElevatedFlow do
-  puts 'hello'
+
+  configure do
+    name  "Support escalation"
+    version 0
+  end
+
+  main do
+  end
+
 end

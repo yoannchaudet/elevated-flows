@@ -8,4 +8,5 @@ Gem::Specification.new do |s|
 
   # Dependencies
   s.add_dependency("octokit", "~> 5.0")
+  s.add_dependency("singleton", "~> 0.1")
 end
