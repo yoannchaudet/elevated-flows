@@ -13,5 +13,11 @@ Elevated-flows is a 2022 1-week Hackathon project started with this premise:
 
 **Day 2**
 
+- Banged my head against the whole with Ruby
+
+**Day 3**
+
+- Switch to JavaScript 😢
+
 <!-- references -->
 [day1]: ./discussions/2022-09-19.md
