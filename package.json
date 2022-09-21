@@ -1,0 +1,27 @@
+{
+  "name": "elevated-flows",
+  "version": "0.0.1",
+  "description": "A higher level workflow support for working with issues and projects",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "eslint": "^8.2.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-github": "^4.3.4",
+    "prettier": "^2.4.1"
+  },
+  "scripts": {
+    "lint": "eslint src",
+    "prepare": "echo nothing",
+    "test": "jest",
+    "format": "prettier --write 'src/**/*.js'",
+    "format:check": "prettier --check 'src/**/*.js'",
+    "all": "npm run format && npm run lint && npm run prepare && npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yoannchaudet/elevated-flows"
+  },
+  "author": "Yoann Chaudet",
+  "license": "MIT"
+}

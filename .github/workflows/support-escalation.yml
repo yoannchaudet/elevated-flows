@@ -1,0 +1,24 @@
+# Get from config
+name: Support escalation
+
+# Derive from main
+on:
+  issues:
+    types: [opened]
+
+# Derive from main
+permissions:
+  issues: write
+
+jobs:
+  elevated-flow:
+    runs-on: ubuntu-latest
+    steps:
+      # WIP: instead of checkout we need distribution of this repo
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Main
+        run: -|
+          # here it goes
+        shell: "my custom shell"
