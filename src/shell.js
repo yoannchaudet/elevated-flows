@@ -12,12 +12,25 @@ if (args.length != 1) {
 }
 
 // Create a context for the flow
-const context = {}
+const context = {
+  process: process
+}
 vm.createContext(context)
 
 // Create a script from the flow
 const flow = fs.readFileSync(args[0], 'utf8')
-const flowScript = new vm.Script(flow, {
+const flowWrapper = `
+  'use strict';
+  (async () => {
+    try {
+      ${flow};
+    } catch(e) {
+      console.error('Flow error', e)
+      process.exit(1)
+    }
+  })()
+`
+const flowScript = new vm.Script(flowWrapper, {
   filename: path.parse(args[0]).base
 })
 

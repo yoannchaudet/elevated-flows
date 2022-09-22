@@ -15,6 +15,16 @@
       "args": [
         "/Users/yoannchaudet/personal-repos/elevated-flows/.github/flows/support-escalation.js"
       ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Jest",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/node_modules/.bin/jest",
     }
+
   ]
 }
