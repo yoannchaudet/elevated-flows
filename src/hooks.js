@@ -151,7 +151,7 @@ class HooksCaller {
   }
 
   onSchedule(schedule) {
-    return this.add(new OnSchedule(schedule))
+    return this.add(new OnSchedule(this.ctx, schedule))
   }
 
   // Add a hook to the list and return it
