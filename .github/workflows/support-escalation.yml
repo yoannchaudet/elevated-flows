@@ -3,8 +3,17 @@ name: Support escalation
 
 # Derive from main
 on:
+  push:
+    branches: [ main ]
+    paths:
+      - .github/flows/support-escalation.js
+      - .github/workflows/support-escalation.yml
+
+  schedule:
+    - cron: '*/10 * * * *'
+
   issues:
-    types: [opened]
+    types: [opened, labeled, unlabeled]
 
 # Derive from main
 permissions:
@@ -14,11 +23,10 @@ jobs:
   elevated-flow:
     runs-on: ubuntu-latest
     steps:
-      # WIP: instead of checkout we need distribution of this repo
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Main
-        run: -|
-          # here it goes
-        shell: "my custom shell"
+      - name: Run flow
+        uses: ./
+        with:
+          path: ./.github/flows/support-escalation.js
