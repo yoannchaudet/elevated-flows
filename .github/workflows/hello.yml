@@ -1,0 +1,18 @@
+name: hello
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  elevated-flow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Run flow
+        uses: ./action.yml
+        with:
+          flow-path: ./flows/hello.yml
