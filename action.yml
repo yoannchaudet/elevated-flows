@@ -3,7 +3,7 @@ description: "A GitHub Action to run an elevated flow."
 author: "Yoann Chaudet"
 runs:
   using: "node16"
-  main: "dist/action.js"
+  main: "dist/index.js"
 inputs:
   path:
     description: "Path to the flow to run."
