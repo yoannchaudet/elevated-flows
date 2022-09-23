@@ -2,6 +2,8 @@ const process = require('process')
 const vm = require('vm')
 const fs = require('fs')
 const path = require('path')
+const github = require('@actions/github')
+const { HooksCaller } = require('./hooks')
 
 class Runner {
   constructor(flowPath) {
@@ -14,10 +16,21 @@ class Runner {
       throw `Flow file not found: ${this.flowPath}`
     }
 
+    // Prepare the hooks
+    const hooks = new HooksCaller({
+      github: github.context
+    })
+
     // Create a context for the flow
     const context = {
       process: process,
-      console: console
+      console: console,
+
+      // Hooks
+      onInit: hooks.onHooks.OnInit,
+      onIssue: hooks.onHooks.onIssue,
+      onSchedule: hooks.onHooks.onSchedule,
+      do: hooks.do
     }
     vm.createContext(context)
 
@@ -28,6 +41,9 @@ class Runner {
     (async () => {
       try {
         ${flow};
+
+        // Run the hooks
+        await do();
       } catch(e) {
         console.error('Flow error', e)
         process.exit(1)
