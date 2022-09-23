@@ -24,32 +24,50 @@ const ISSUE_TYPES = [
   'demilestoned'
 ]
 
-class OnInit {
-  constructor(ctx, defaultBranch) {
+// A base hook
+class Hook {
+  // Ctor
+  constructor(ctx) {
     this.ctx = ctx
-    this.defaultBranch = defaultBranch
   }
 
-  // ⚠️ We cannot filter on anything better than the event name
-  matches() {
-    return this.ctx.github.eventName == 'push'
-  }
-
-  async do(lambda) {
+  // Save the lambda to execute if the hook is matched
+  do(lambda) {
     this.lambda = lambda
+  }
+
+  // Does this hook matches the current context?
+  matches() {
+    return false
   }
 }
 
-class OnIssue {
+class OnInit extends Hook {
+  // Ctor
+  constructor(ctx, defaultBranch) {
+    super(ctx)
+    this.defaultBranch = defaultBranch
+  }
+
+  // Does this hook matches the current context?
+  matches() {
+    // ⚠️ We cannot filter on anything better than the event name for now
+    // TODO: cook up some artifact context here
+    return this.ctx.github.eventName == 'push'
+  }
+}
+
+class OnIssue extends Hook {
+  // Ctor
   constructor(ctx) {
-    this.ctx = ctx
+    super(ctx)
     this.types = []
     this.labels = []
   }
 
-  // Filter event types
-  type(type) {
-    if (ISSUE_TYPES.includes(type)) {
+  // Filter event
+  withEvent(type) {
+    if (!ISSUE_TYPES.includes(type)) {
       throw `provided type '${type}' is invalid`
     }
     this.types.push(type)
@@ -59,49 +77,56 @@ class OnIssue {
   }
 
   // Filter labels
-  label(label) {
+  withLabel(label) {
     this.labels.push(label)
 
     // Return the object to allow fluent chaining
     return this
   }
 
-  // Matches event
+  // Does this hook matches the current context?
   matches() {
     // Validate event name
     if (this.ctx.github.eventName != 'issues') {
       return false
     }
 
+    // Filter event
+    if (this.types.length > 0 && !this.types.includes(this.ctx.github?.payload?.action)) {
+      return false
+    }
+
     // Filter label
     if (this.labels.length > 0) {
-      if (['labeled', 'unlabeled'].includes(this.ctx.github.payload.action)) {
-        return this.labels.includes(this.ctx.github.payload.label.name)
-      } else {
-        for (var i = 0; i < this.ctx.github.payload.labels.length; i++) {
-          if (this.labels.includes(this.ctx.github.payload.label.name)) {
-            return true
-          }
-        }
-        return false
+      // Labeled and unlabeled runs in the context of one specific label, so use that for the match
+      if (['labeled', 'unlabeled'].includes(this.ctx.github?.payload?.action)) {
+        return this.labels.includes(this.ctx.github?.payload?.label?.name) || false
+      }
+
+      // For other events, just look at the list of labels on the issue
+      else {
+
+        const github = this.ctx.github
+        return this.labels.reduce((check, label) => {
+          return check && github?.payload?.labels?.find(l => l.name === label) != undefined
+        }, true) || false
       }
     }
 
     return true
   }
-
-  async do(lambda) {
-    this.lambda = lambda
-  }
 }
 
-class OnSchedule {
+class OnSchedule extends Hook {
   constructor(ctx, schedule) {
-    this.ctx = ctx
+    super(ctx)
     this.schedule = schedule
   }
 
-  async do(lambda) {}
+  // Does this hook matches the current context?
+  matches() {
+    return this.ctx.github.eventName != 'schedule' && this.ctx.github.payload.schedule == this.schedule
+  }
 }
 
 class Hooks {
@@ -133,4 +158,4 @@ class Hooks {
   }
 }
 
-module.exports = { Hooks }
+module.exports = { OnInit, OnIssue, Hooks }
