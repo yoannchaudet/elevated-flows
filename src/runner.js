@@ -16,7 +16,8 @@ class Runner {
 
     // Create a context for the flow
     const context = {
-      process: process
+      process: process,
+      console: console
     }
     vm.createContext(context)
 
