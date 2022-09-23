@@ -15,4 +15,4 @@ jobs:
       - name: Run flow
         uses: ./
         with:
-          path: ./flows/hello.yml
+          path: ./.githhub/flows/hello.js
