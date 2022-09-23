@@ -15,4 +15,4 @@ jobs:
       - name: Run flow
         uses: ./
         with:
-          flow-path: ./flows/hello.yml
+          path: ./flows/hello.yml
