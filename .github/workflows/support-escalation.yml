@@ -15,9 +15,9 @@ on:
   issues:
     types: [opened, labeled, unlabeled]
 
-# Derive from main
-permissions:
-  issues: write
+# # Derive from main
+# permissions:
+#   issues: write
 
 jobs:
   elevated-flow:
