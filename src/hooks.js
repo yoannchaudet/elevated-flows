@@ -42,6 +42,8 @@ class Hook {
   }
 }
 
+// Initialzation hook, call a first time at creation
+// or when the workflow changes
 class OnInit extends Hook {
   // Ctor
   constructor(ctx, defaultBranch) {
@@ -57,6 +59,7 @@ class OnInit extends Hook {
   }
 }
 
+// Issue hook, called on issue events
 class OnIssue extends Hook {
   // Ctor
   constructor(ctx) {
@@ -105,11 +108,12 @@ class OnIssue extends Hook {
 
       // For other events, just look at the list of labels on the issue
       else {
-
         const github = this.ctx.github
-        return this.labels.reduce((check, label) => {
-          return check && github?.payload?.labels?.find(l => l.name === label) != undefined
-        }, true) || false
+        return (
+          this.labels.reduce((check, label) => {
+            return check && github?.payload?.labels?.find(l => l.name === label) != undefined
+          }, true) || false
+        )
       }
     }
 
@@ -117,6 +121,7 @@ class OnIssue extends Hook {
   }
 }
 
+// Schedule hook, called on schedule
 class OnSchedule extends Hook {
   constructor(ctx, schedule) {
     super(ctx)
@@ -125,37 +130,38 @@ class OnSchedule extends Hook {
 
   // Does this hook matches the current context?
   matches() {
-    return this.ctx.github.eventName != 'schedule' && this.ctx.github.payload.schedule == this.schedule
+    return this.ctx.github.eventName == 'schedule' && this.ctx.github.payload.schedule == this.schedule
   }
 }
 
-class Hooks {
+// Class responsibling for calling the right hook
+class HooksCaller {
+  // Ctor
   constructor(ctx) {
     this.ctx = ctx
     this.hooks = []
 
-    // Init the context to be exposed to the flow
-    this.hookContext = {
-      onInit: branch => this.pushHook(new OnInit(this.ctx, branch)),
-      onIssue: () => this.pushHook(new OnIssue(this.ctx)),
-      onSchedule: schedule => this.pushHook(new OnSchedule(schedule))
+    // Lambdas for registering hooks
+    this.onHooks = {
+      onInit: branch => this.add(new OnInit(this.ctx, branch)),
+      onIssue: () => this.add(new OnIssue(this.ctx)),
+      onSchedule: schedule => this.add(new OnSchedule(schedule))
     }
   }
 
   // Add a hook to the list and return it
-  pushHook(hook) {
+  add(hook) {
     this.hooks.push(hook)
     return hook
   }
 
-  // Parse the given `github` object and call the right hook (if any)
+  // Enumerate through all the hooks and call the first one that matches an event
   async do() {
-    this.hooks.forEach(hook => {
-      if (hook.matches()) {
-        hook.lambda()
-      }
-    })
+    const hook = this.hooks.find(h => h.matches())
+    if (hook) {
+      await hook.lambda()
+    }
   }
 }
 
-module.exports = { OnInit, OnIssue, Hooks }
+module.exports = { OnInit, OnIssue, OnSchedule, HooksCaller }

@@ -1,8 +1,6 @@
-const { Hooks, OnInit, OnIssue } = require('./hooks')
+const { OnInit, OnIssue, OnSchedule, HooksCaller } = require('./hooks')
 
-require('./hooks')
-
-describe('hooks', () => {
+describe('Hooks', () => {
   it('matches OnInit hook', () => {
     const ctx = {
       github: {
@@ -93,33 +91,53 @@ describe('hooks', () => {
     expect(hook.matches()).toBe(false)
   })
 
-  // WIP
-
-  it('detects onInit()', () => {
+  it('matches OnSchedule hook', () => {
     const ctx = {
       github: {
-        eventName: 'push'
+        eventName: 'schedule',
+        payload: {
+          schedule: '0 0 * * *'
+        }
       }
     }
-    const hooks = new Hooks(ctx)
-    const lambda = jest.fn(() => {})
-    hooks.hookContext.onInit('main').do(lambda)
-    expect(lambda).toHaveBeenCalledTimes(0)
-    hooks.do()
-    expect(lambda).toHaveBeenCalledTimes(1)
+    const hook = new OnSchedule(ctx, '0 0 * * *')
+    expect(hook.matches()).toBe(true)
+    ctx.github.payload.schedule = '0 0 * * 1'
+    expect(hook.matches()).toBe(false)
+  })
+})
+
+describe('HooksCaller', () => {
+  it('adds hook', () => {
+    const hooks = new HooksCaller({})
+    const hook1 = hooks.onHooks.onInit('main')
+    expect(hooks.hooks.length).toBe(1)
+    expect(hooks.hooks.includes(hook1)).toBe(true)
+    const hook2 = hooks.onHooks.onIssue()
+    expect(hooks.hooks.length).toBe(2)
+    expect(hooks.hooks.includes(hook2)).toBe(true)
+    const hook3 = hooks.onHooks.onSchedule('0 0 * * *')
+    expect(hooks.hooks.length).toBe(3)
+    expect(hooks.hooks.includes(hook3)).toBe(true)
   })
 
-  it('detects onIssue()', () => {
-    const ctx = {
-      github: {
-        eventName: 'issues'
-      }
+  it('invokes the right hook', async () => {
+    const hooks = new HooksCaller({})
+    const hook1 = {
+      matches: jest.fn().mockReturnValue(false)
     }
-    const hooks = new Hooks(ctx)
-    const lambda = jest.fn(() => {})
-    hooks.hookContext.onIssue().do(lambda)
-    expect(lambda).toHaveBeenCalledTimes(0)
-    hooks.do()
-    expect(lambda).toHaveBeenCalledTimes(1)
+    const hook2 = {
+      matches: jest.fn().mockReturnValue(false)
+    }
+    const hook3 = {
+      matches: jest.fn().mockReturnValue(true),
+      lambda: jest.fn()
+    }
+    hooks.hooks = [hook1, hook2, hook3]
+    await hooks.do()
+    expect(hook1.matches).toBeCalledTimes(1)
+    expect(hook2.matches).toBeCalledTimes(1)
+    expect(hook3.matches).toBeCalledTimes(1)
+    expect(hook3.lambda).toBeCalledTimes(1)
   })
 })
