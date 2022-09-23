@@ -140,13 +140,18 @@ class HooksCaller {
   constructor(ctx) {
     this.ctx = ctx
     this.hooks = []
+  }
 
-    // Lambdas for registering hooks
-    this.onHooks = {
-      onInit: branch => this.add(new OnInit(this.ctx, branch)),
-      onIssue: () => this.add(new OnIssue(this.ctx)),
-      onSchedule: schedule => this.add(new OnSchedule(schedule))
-    }
+  onInit(branch) {
+    return this.add(new OnInit(this.ctx, branch))
+  }
+
+  onIssue() {
+    return this.add(new OnIssue(this.ctx))
+  }
+
+  onSchedule(schedule) {
+    return this.add(new OnSchedule(schedule))
   }
 
   // Add a hook to the list and return it

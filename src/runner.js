@@ -27,10 +27,7 @@ class Runner {
       console: console,
 
       // Hooks
-      onInit: hooks.onHooks.OnInit,
-      onIssue: hooks.onHooks.onIssue,
-      onSchedule: hooks.onHooks.onSchedule,
-      do: hooks.do
+      flow: hooks
     }
     vm.createContext(context)
 
@@ -43,7 +40,7 @@ class Runner {
         ${flow};
 
         // Run the hooks
-        await do();
+        await flow.do();
       } catch(e) {
         console.error('Flow error', e)
         process.exit(1)

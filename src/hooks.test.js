@@ -110,13 +110,13 @@ describe('Hooks', () => {
 describe('HooksCaller', () => {
   it('adds hook', () => {
     const hooks = new HooksCaller({})
-    const hook1 = hooks.onHooks.onInit('main')
+    const hook1 = hooks.onInit('main')
     expect(hooks.hooks.length).toBe(1)
     expect(hooks.hooks.includes(hook1)).toBe(true)
-    const hook2 = hooks.onHooks.onIssue()
+    const hook2 = hooks.onIssue()
     expect(hooks.hooks.length).toBe(2)
     expect(hooks.hooks.includes(hook2)).toBe(true)
-    const hook3 = hooks.onHooks.onSchedule('0 0 * * *')
+    const hook3 = hooks.onSchedule('0 0 * * *')
     expect(hooks.hooks.length).toBe(3)
     expect(hooks.hooks.includes(hook3)).toBe(true)
   })

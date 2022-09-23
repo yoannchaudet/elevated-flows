@@ -9633,13 +9633,18 @@ class HooksCaller {
   constructor(ctx) {
     this.ctx = ctx
     this.hooks = []
+  }
 
-    // Lambdas for registering hooks
-    this.onHooks = {
-      onInit: branch => this.add(new OnInit(this.ctx, branch)),
-      onIssue: () => this.add(new OnIssue(this.ctx)),
-      onSchedule: schedule => this.add(new OnSchedule(schedule))
-    }
+  onInit(branch) {
+    return this.add(new OnInit(this.ctx, branch))
+  }
+
+  onIssue() {
+    return this.add(new OnIssue(this.ctx))
+  }
+
+  onSchedule(schedule) {
+    return this.add(new OnSchedule(schedule))
   }
 
   // Add a hook to the list and return it
@@ -9694,10 +9699,7 @@ class Runner {
       console: console,
 
       // Hooks
-      onInit: hooks.onHooks.OnInit,
-      onIssue: hooks.onHooks.onIssue,
-      onSchedule: hooks.onHooks.onSchedule,
-      do: hooks.do
+      flow: hooks
     }
     vm.createContext(context)
 
@@ -9710,7 +9712,7 @@ class Runner {
         ${flow};
 
         // Run the hooks
-        await do();
+        await flow.do();
       } catch(e) {
         console.error('Flow error', e)
         process.exit(1)

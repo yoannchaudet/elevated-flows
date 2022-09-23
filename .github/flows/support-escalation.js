@@ -4,19 +4,19 @@ const config = {
 
 console.log('Starting flow')
 
-onInit('main').do(async () => {
+flow.onInit('main').do(async () => {
   // Run the first time (or when the workflow is edited)
   console.log('On init')
 })
 
-onSchedule('*/10 * * * *').do(async () => {
+flow.onSchedule('*/10 * * * *').do(async () => {
   // Run on a schedule
   console.log('On schedule (every 10 min)')
 })
 
 // Add to project if needed
-onIssue()
-  .type('opened')
+flow.onIssue()
+  .withEvent('opened')
   .withLabel('support-escalation')
   .do(async issue => {
     console.log('On issue (opened) with label support-escalation')
@@ -26,8 +26,8 @@ onIssue()
   })
 
 // Awaiting customer response
-onIssue()
-  .type('labeled')
+flow.onIssue()
+  .withEvent('labeled')
   .withLabel('awaiting-customer')
   .do(async issue => {
     // setProjectColumn(project, issue, blockedColumn)
@@ -35,8 +35,8 @@ onIssue()
   })
 
 // Back to triage
-onIssue()
-  .type('unlabeled')
+flow.onIssue()
+  .withEvent('unlabeled')
   .withLabel('awaiting-customer')
   .do(async issue => {
     // setProjectColumn(project, issue, triageColumn)
