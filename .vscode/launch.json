@@ -11,9 +11,10 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "program": "${workspaceFolder}/src/shell.js",
+      "program": "${workspaceFolder}/src/cli.js",
       "args": [
-        "/Users/yoannchaudet/personal-repos/elevated-flows/.github/flows/support-escalation.js"
+        "run",
+        "/Users/yoannchaudet/personal-repos/elevated-flows/.github/flows/hello.js"
       ]
     },
     {

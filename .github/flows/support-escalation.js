@@ -2,6 +2,8 @@ const config = {
   name: 'Support escalation',
 }
 
+console.log('Hello there')
+
 onInit().do(async () => {
   // Run the first time (or when the workflow is edited)
 })
@@ -11,7 +13,7 @@ onSchedule('').do(async () =>{
 })
 
 // Add to project if needed
-await onIssue()
+onIssue()
   .type('opened')
   .withLabel('support-escalation')
   .do(async issue => {
@@ -21,7 +23,7 @@ await onIssue()
   })
 
 // Awaiting customer response
-await onIssue()
+onIssue()
   .type('labeled')
   .withLabel('awaiting-customer')
   .do(async issue => {
@@ -29,7 +31,7 @@ await onIssue()
   })
 
 // Back to triage
-await onIssue()
+onIssue()
   .type('unlabeled')
   .withLabel('awaiting-customer')
   .do(async issue => {

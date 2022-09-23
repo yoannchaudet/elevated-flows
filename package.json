@@ -3,10 +3,13 @@
   "version": "0.0.1",
   "description": "A higher level workflow support for working with issues and projects",
   "dependencies": {
+    "@actions/core": "^1.9.1",
     "@octokit/graphql": "^5.0.1",
-    "octokit": "^2.0.7"
+    "octokit": "^2.0.7",
+    "yargs": "^17.5.1"
   },
   "devDependencies": {
+    "@vercel/ncc": "^0.34.0",
     "eslint": "^8.2.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-github": "^4.3.4",
@@ -15,11 +18,14 @@
   },
   "scripts": {
     "lint": "eslint src",
-    "prepare": "echo nothing",
+    "prepare": "npm run format && ncc build src/action.js -o dist --source-map --license licenses.txt",
     "test": "jest",
     "format": "prettier --write 'src/**/*.js'",
     "format:check": "prettier --check 'src/**/*.js'",
     "all": "npm run format && npm run lint && npm run prepare && npm run test"
+  },
+  "bin": {
+    "eflow": "src/cli.js"
   },
   "repository": {
     "type": "git",

@@ -1,0 +1,10 @@
+name: "Run an elevated flow"
+description: "A GitHub Action to run an elevated flow."
+author: "Yoann Chaudet"
+runs:
+  using: "node16"
+  main: "dist/action.js"
+inputs:
+  path:
+    description: "Path to the flow to run."
+    required: true
