@@ -13,8 +13,8 @@
       ],
       "program": "${workspaceFolder}/src/cli.js",
       "args": [
-        "run",
-        "/Users/yoannchaudet/personal-repos/elevated-flows/.github/flows/hello.js"
+        "compile",
+        "/Users/yoannchaudet/personal-repos/elevated-flows/.github/flows/hello2.js"
       ]
     },
     {

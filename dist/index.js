@@ -9677,6 +9677,7 @@ const path = __nccwpck_require__(1017)
 const github = __nccwpck_require__(5438)
 const { HooksCaller } = __nccwpck_require__(1758)
 
+// Class responsible for running a flow given its path
 class Runner {
   constructor(flowPath) {
     this.flowPath = flowPath

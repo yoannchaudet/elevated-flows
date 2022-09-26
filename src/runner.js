@@ -5,6 +5,7 @@ const path = require('path')
 const github = require('@actions/github')
 const { HooksCaller } = require('./hooks')
 
+// Class responsible for running a flow given its path
 class Runner {
   constructor(flowPath) {
     this.flowPath = flowPath

@@ -1,3 +1,5 @@
+require('some-random-stuff') // 1.2
+
 const config = {
   name: 'Support escalation'
 }
