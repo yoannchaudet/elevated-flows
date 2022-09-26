@@ -9701,7 +9701,9 @@ class Runner {
       console: console,
 
       // Hooks
-      flow: hooks
+      flow: hooks,
+      // GitHub
+      github: hooks.ctx.github
     }
     vm.createContext(context)
 
