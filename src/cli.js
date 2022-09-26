@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-const { parse } = require('yargs')
 const yargs = require('yargs')
 const { FlowParser, FlowCompiler } = require('./compiler')
 const { Runner } = require('./runner')
@@ -44,8 +43,8 @@ yargs
       // Print errors and exit
       if (parser.errors.length > 0) {
         console.error('Flow errors:')
-        for (var i = 0; i < parse.errors.length; i++) {
-          console.error(`  - ${parse.errors[i]}`)
+        for (var i = 0; i < parser.errors.length; i++) {
+          console.error(`  - ${parser.errors[i]}`)
         }
         process.exit(1)
       }

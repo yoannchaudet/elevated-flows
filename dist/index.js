@@ -9694,7 +9694,6 @@ class Runner {
       github: github.context
     }
     const hooks = new HooksCaller(ctx)
-    console.log(JSON.stringify(ctx))
 
     // Create a context for the flow
     const context = {

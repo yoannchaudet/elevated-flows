@@ -1,6 +1,7 @@
 const espree = require('espree')
 const fs = require('fs')
 const yaml = require('yaml')
+const path = require('path')
 
 // Class responsible for parsing and validating a flow
 class FlowParser {
@@ -96,7 +97,7 @@ class FlowParser {
 
   // Return the value of a configuration property
   getConfigLiteralProperty(config, name) {
-    const property = config.properties.find(property => {
+    const property = config?.properties.find(property => {
       return (
         // property filter
         property.type === 'Property' &&
@@ -304,7 +305,7 @@ class FlowCompiler {
           },
           {
             name: 'Run flow',
-            uses: 'yoannchaudet/elevated-flow@main',
+            uses: 'yoannchaudet/elevated-flows@main',
             with: {
               path: this.sanitizePath(this.flowPath)
             }
@@ -314,6 +315,7 @@ class FlowCompiler {
     }
 
     // Output the workflow
+    fs.mkdirSync(path.dirname(this.workflowPath), { recursive: true })
     fs.writeFileSync(this.workflowPath, yaml.stringify(workflow), 'utf8')
     console.log('Workflow generated at ' + this.workflowPath)
   }
